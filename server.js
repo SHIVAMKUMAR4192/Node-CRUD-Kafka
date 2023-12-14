@@ -2,11 +2,17 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = require("./route/item.route")
+const KafkaConfig = require("./config/kafkaConfig")
 const app = express();
 
 var corsOptions ={
     origin: "http://localhost:8081"
 };
+
+const kafkaConfig = new KafkaConfig();
+kafkaConfig.consume("my-topic",(value) =>{
+    console.log("Received message: " ,value)
+})
 
 app.use(cors(corsOptions));
 app.use(express.json());
