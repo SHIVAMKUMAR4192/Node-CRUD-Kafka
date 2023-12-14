@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const router = require("./route/item.route")
+const router = require("./route/route")
 const KafkaConfig = require("./config/kafkaConfig")
 const app = express();
 
