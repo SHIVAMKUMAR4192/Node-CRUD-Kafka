@@ -25,3 +25,7 @@ Response:
   "message": "Message successfully sent!"
 }
 
+
+Included Jwt authentication to generate the token and verify before hitting the api
+
+included axios for getting the response from different api 
