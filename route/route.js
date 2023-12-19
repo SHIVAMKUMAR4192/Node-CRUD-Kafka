@@ -3,7 +3,7 @@ const kafkaControllers = require('../controller/kafkaController');
 const router = require('express').Router();
 const authController = require('../controller/authController');
 const authenticateToken = require('../middleware/authMiddleware')
-
+const sendMail = require('../controller/sendMailController');
 
 
 router.post('/addItem', authenticateToken,itemController.addItem)
@@ -16,6 +16,7 @@ router.post("/kafka/send", kafkaControllers.sendMessageToKafka);
 router.put('/:id', authenticateToken, itemController.updateItem);
 router.delete('/:id', authenticateToken, itemController.deleteItem);
 
+//this is for jwt token generation
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -28,6 +29,9 @@ router.post('/login', async (req, res) => {
     res.status(401).json({ message: 'Invalid credentials' });
   }
 });
+
+//this is for sending a mail
+router.post('/sendMail', sendMail);
 
 
 module.exports = router;
