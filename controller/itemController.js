@@ -1,19 +1,35 @@
 const db = require("../model");
 const Item = db.item;
-
+const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 
 exports.addItem = async (req, res) => {
     try {
         const items = req.body;
+        const correlationId = req.correlationId || uuidv4(); 
 
-        console.log('Received Items:', items);
+        console.log(`Received Items with Correlation ID ${correlationId}:`, items);
+
         if (!Array.isArray(items)) {
             return res.status(400).json({ error: 'Invalid input. Expected an array of items.' });
         }
 
         const createdItems = await Promise.all(items.map(item => Item.create(item)));
 
-        res.status(200).json(createdItems);
+        try {
+            const response = await axios.post('https://rapidapi.com/learn/api/rest', { name:"John Doe" }, {
+                headers: {
+                    'Correlation-Id': correlationId,
+                    'Authorization': req.header('Authorization'),
+                },
+            });
+
+            console.log(`API Response with Correlation ID ${correlationId}:`, response.data);
+        } catch (error) {
+            console.error(`API Error with Correlation ID ${correlationId}:`, error.message);
+        }
+
+        res.status(200).json({ message: 'Item added successfully', correlationId });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });

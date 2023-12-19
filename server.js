@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = require("./route/route")
 const KafkaConfig = require("./config/kafkaConfig")
+const dotenv = require ('dotenv')
+dotenv.config();
+
 const app = express();
 
 var corsOptions ={
@@ -18,7 +21,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use('/api/items',router);
-
 app.get('/',(req,res) =>{
     res.json({ message: 'hello from api'})
 })
