@@ -29,3 +29,5 @@ Response:
 Included Jwt authentication to generate the token and verify before hitting the api
 
 included axios for getting the response from different api 
+
+Include email sending- added dependency nodemailer
