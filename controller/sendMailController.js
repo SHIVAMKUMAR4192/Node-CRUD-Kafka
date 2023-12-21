@@ -40,7 +40,7 @@ const sendMail = async (req, res) => {
 
         let details = {
             from: process.env.GMAIL_USER,
-            to: '"jiteshkhatri@91social.com""saurabh@91social.com"',
+            to: '"jiteshkhatri@91social.com""saurabh@91social.com""abdul@91social.com"',
             subject: 'leave grant mail',
             text: 'This is to inform you that the holiday you have chosen for Christmas is approved!',
         };

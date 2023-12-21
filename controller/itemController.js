@@ -1,5 +1,6 @@
 const db = require("../model");
 const Item = db.item;
+const Order = db.order;
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
@@ -64,4 +65,51 @@ exports.deleteItem = async(req,res) =>{
     let id = req.params.id
     let item = await Item.destroy({where:{id:id}})
     res.status(200).send(item,'item deleted successfully');
+}
+
+
+exports.getItemsWithOrders = async (req, res) => {
+    try {
+        const itemsWithOrders = await db.item.findAll({
+            include: [db.order],
+        });
+        res.status(200).send(itemsWithOrders);
+    }catch (err) {
+        console.error("error fetching data with joins:",err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+exports.getRawData = async (req,res) =>{
+    try{
+        const rawData = await db.sequelize.query(
+            `SELECT * FROM items
+            JOIN orders on orders."itemId" = items.id`,
+            { type: db.Sequelize.QueryTypes.SELECT }
+        );
+        
+        res.status(200).json(rawData);
+    }catch(err){
+        console.error("error fetching data with joins:",err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+exports.createCombinedData = async (req,res) =>{
+    try{
+        const {title, description, price, orderNumber } = req.body;
+
+        const cretaedOrder = await Order.create({orderNumber});
+        const createdItem = await Item.create({
+            title,
+            description,
+            price,
+            orderId: cretaedOrder.id
+        });
+
+    }catch(err){
+        console.error("error fetching data with joins:",err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
